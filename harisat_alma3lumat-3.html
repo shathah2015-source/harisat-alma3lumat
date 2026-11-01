@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حارسات المعلومات</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#101735,#30205b);color:#fff;min-height:100vh;display:grid;place-items:center;padding:18px}
+main{width:min(720px,100%);background:#fff;color:#18213c;border-radius:24px;padding:24px;box-shadow:0 18px 60px #0005}
+header{text-align:center;background:linear-gradient(120deg,#192957,#563c91);color:white;border-radius:18px;padding:22px;margin-bottom:18px}
+h1{margin:8px 0;font-size:clamp(25px,5vw,36px)}header p{margin:0;color:#dce8ff}
+.meta{display:flex;justify-content:space-between;color:#59627a;font-size:14px;margin:12px 0}
+.question{background:#eef2ff;border-radius:14px;padding:18px;font-size:19px;font-weight:bold;line-height:1.7;margin:12px 0}
+.options{display:grid;gap:10px}.option{border:2px solid #d9def0;background:white;border-radius:13px;padding:14px;text-align:right;font:inherit;font-size:16px;cursor:pointer;color:#18213c}.option:hover{border-color:#7660c5;background:#f8f6ff}.option:disabled{cursor:default}.correct{background:#dcfce7!important;border-color:#22a35a!important}.wrong{background:#fee2e2!important;border-color:#dc4545!important}
+.feedback{padding:14px;border-radius:12px;background:#f1f5f9;margin-top:14px;line-height:1.7}.btn{border:0;background:#6246b5;color:white;border-radius:12px;padding:13px 20px;font:inherit;font-weight:bold;cursor:pointer;width:100%;margin-top:14px}.btn:hover{background:#4f3699}.start{text-align:center;line-height:1.8}.score{font-size:32px;font-weight:bold;color:#6246b5}
+</style>
+</head>
+<body>
+<main>
+<header><div style="font-size:38px">🔐</div><h1>حارسات المعلومات</h1><p>مهمة سرية لحماية الخزنة الرقمية</p></header>
+<div id="app" class="start">
+<h2>هل أنتِ مستعدة للمهمة؟</h2>
+<p>أجيبي عن 5 تحديات رقمية، واكتشفي كيف تحمين معلوماتك.</p>
+<button class="btn" onclick="startGame()">ابدئي المهمة 🚀</button>
+</div>
+</main>
+<script>
+const qs=[
+["وصلتك رسالة: «مبروك! ربحتِ هاتفًا، اضغطي هنا لإدخال بياناتك». ماذا تفعلين؟",["أضغط على الرابط فورًا","أتحقق من مصدر الرسالة وأتجاهل الرابط المشبوه","أرسلها إلى صديقاتي"],1,"التحقق من مصدر الرسالة يساعد على تجنب التصيد الإلكتروني."],
+["أي كلمة مرور تعد أكثر أمانًا؟",["12345678","اسمك وتاريخ ميلادك","كلمة مرور طويلة وفريدة تجمع أحرفًا وأرقامًا ورموزًا"],2,"كلمة المرور الطويلة والفريدة تجعل تخمينها أكثر صعوبة."],
+["وجدتِ ذاكرة USB مجهولة في المختبر، ماذا تفعلين؟",["أوصلها بحاسوبي لمعرفة محتواها","أسلمها للمعلمة ولا أوصلها بالجهاز","أستخدمها لحفظ ملفاتي"],1,"الأجهزة المجهولة قد تحتوي على ملفات ضارة؛ لا توصليها بالحاسوب."],
+["ما التصرف الصحيح عند استخدام شبكة Wi-Fi عامة؟",["أدخل بياناتي الحساسة في أي موقع","أشارك كلمة مروري مع الآخرين","أتجنب إدخال المعلومات الحساسة وأستخدم اتصالًا موثوقًا"],2,"الشبكات العامة قد لا تكون آمنة، لذا احمي المعلومات الحساسة."],
+["ما الهدف الأساسي من أمن المعلومات؟",["حماية المعلومات من الوصول أو التغيير أو الإتلاف غير المصرح به","زيادة سرعة الإنترنت","تغيير شكل الملفات"],0,"أمن المعلومات يهدف إلى حماية سرية المعلومات وسلامتها وتوافرها."]
+];
+let idx=0,score=0,answered=false;
+function startGame(){idx=0;score=0;render()}
+function render(){
+answered=false;let q=qs[idx];let app=document.getElementById("app");
+app.innerHTML=`<div class="meta"><span>المرحلة ${idx+1} من 5</span><span>النقاط: ${score}</span></div><div class="question">${q[0]}</div><div class="options">${q[1].map((o,i)=>`<button class="option" onclick="choose(${i})">${["أ","ب","ج"][i]}. ${o}</button>`).join("")}</div><div id="feedback"></div>`;
+}
+function choose(n){
+if(answered)return;answered=true;let q=qs[idx],buttons=document.querySelectorAll(".option");
+buttons.forEach((b,i)=>{b.disabled=true;if(i===q[2])b.classList.add("correct");if(i===n&&n!==q[2])b.classList.add("wrong")});
+if(n===q[2])score++;
+document.getElementById("feedback").innerHTML=`<div class="feedback"><b>${n===q[2]?"🎉 إجابة صحيحة!":"💡 الإجابة الصحيحة هي: "+["أ","ب","ج"][q[2]}</b><br>${q[3]}</div><button class="btn" onclick="next()">${idx===4?"افتحي الخزنة 🏆":"التحدي التالي ←"}</button>`;
+}
+function next(){if(idx<4){idx++;render()}else{document.getElementById("app").innerHTML=`<div class="start"><div style="font-size:54px">🏆</div><h2>تم إنجاز المهمة!</h2><div class="score">${score} / 5</div><p>${score===5?"ممتاز! أنتِ حارسة معلومات محترفة.":score>=3?"أحسنتِ! لديكِ وعي جيد بأمن المعلومات.":"بداية جيدة! لنواصل تعلم حماية معلوماتنا."}</p><button class="btn" onclick="startGame()">إعادة اللعب ↻</button><h3>أسئلة للنقاش</h3><p>ما المعلومات التي نحتاج إلى حمايتها؟<br>كيف نحافظ على سرية معلوماتنا الرقمية؟</p></div>`}}
+</script>
+</body></html>
