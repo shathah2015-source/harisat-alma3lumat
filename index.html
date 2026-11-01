@@ -33,7 +33,11 @@ const qs=[
 ["ما الهدف الأساسي من أمن المعلومات؟",["حماية المعلومات من الوصول أو التغيير أو الإتلاف غير المصرح به","زيادة سرعة الإنترنت","تغيير شكل الملفات"],0,"أمن المعلومات يهدف إلى حماية سرية المعلومات وسلامتها وتوافرها."]
 ];
 let idx=0,score=0,answered=false;
-function startGame(){idx=0;score=0;render()}
+function startGame(){
+idx=0;
+score=0;
+render()
+}
 function render(){
 answered=false;let q=qs[idx];let app=document.getElementById("app");
 app.innerHTML=`<div class="meta"><span>المرحلة ${idx+1} من 5</span><span>النقاط: ${score}</span></div><div class="question">${q[0]}</div><div class="options">${q[1].map((o,i)=>`<button class="option" onclick="choose(${i})">${["أ","ب","ج"][i]}. ${o}</button>`).join("")}</div><div id="feedback"></div>`;
